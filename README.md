@@ -1,2 +1,2 @@
 # Climate_Change_Solutions
-Repository for Python based ARIMA modelling of carbon emissions projections
+Repository for Python based ARIMA modeling of carbon emissions projections
