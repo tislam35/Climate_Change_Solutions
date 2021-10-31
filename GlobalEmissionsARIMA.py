@@ -13,9 +13,10 @@ from statsmodels.tsa.arima.model import ARIMA
 #Loading in the data
 dateparse = lambda x: pd.to_datetime(x, format='%Y', errors = 'coerce')
 data = pd.read_csv("Datasets/GlobalEmissions.csv", parse_dates=['Year'], index_col='Year', date_parser=dateparse)
-print(data.index, data.values)
-data.info()
+#print(data.index, data.values)
+#data.info()
 
+'''
 #Testing data with basic graph
 fig, ax = plt.subplots()
 ax.plot(data)
@@ -42,6 +43,7 @@ ax.set_xlabel("Time (Yearly)")
 ax.set_ylabel("Million tonnes of carbon dioxide")
 ax.set_title("Global carbon emissions since 1965")
 plt.show()
+'''
 
 #Finding optimal p, d, q values
 def optimParam(curData):
@@ -61,24 +63,27 @@ def optimParam(curData):
     plt.show()
     return optimal_params
 
+'''
 #Getting ARIMA model forecast for given number of years
-#def getModel(years):
-#    predictions = list()
-#    values = data.values
-#    for i in range(0,years):
-#        model = ARIMA(values, order=optimParam(values), enforce_stationarity=False, enforce_invertibility=False)
-#        nextGuess = model.fit().forecast()[0]
-#        predictions.append(nextGuess)
-#        values= np.append(values, nextGuess)
-#    fig, ax = plt.subplots()
-#    ax.plot(data)
-#    dates = pd.date_range(start="01/01/2020", periods=years, freq='YS')
-#    ax.plot(dates, predictions, color="red")
-#    ax.set_xlabel("Time (Yearly)")
-#    ax.set_ylabel("Million tonnes of carbon dioxide")
-#    ax.set_title("Global carbon emissions since 1965")
-#    plt.show()
-#getModel(10)
+def getModel(years):
+    predictions = list()
+    values = data.values
+    for i in range(0,years):
+        model = ARIMA(values, order=optimParam(values), enforce_stationarity=False, enforce_invertibility=False)
+        nextGuess = model.fit().forecast()[0]
+        predictions.append(nextGuess)
+        values= np.append(values, nextGuess)
+    fig, ax = plt.subplots()
+    ax.plot(data)
+    dates = pd.date_range(start="01/01/2020", periods=years, freq='YS')
+    ax.plot(dates, predictions, color="red")
+    ax.set_xlabel("Time (Yearly)")
+    ax.set_ylabel("Million tonnes of carbon dioxide")
+    ax.set_title("Global carbon emissions since 1965")
+    plt.show()
+
+getModel(10)
+'''
 
 def getModel(targetYear):
     results = ARIMA(data, order=optimParam(data), enforce_stationarity=False, enforce_invertibility=False).fit()
@@ -93,4 +98,4 @@ def getModel(targetYear):
     plt.legend()
     plt.show()
 
-getModel(2050)
+#getModel(2050)
