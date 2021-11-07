@@ -24,4 +24,4 @@
 Optional steps if time permits:\
 -Determine the average carbon emissions by cars based on registration data relative to US emissions instead of a value found online.\
 -Perform forecasting on various thresholds either based on EV Sales market share or EV cars registration share.\
--Consider using vars since EV car sales and EV car registrations are linked together due to being fairly new technology.\
+-Consider using vars since EV car sales and EV car registrations are linked together due to being fairly new technology.
