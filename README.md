@@ -15,7 +15,7 @@
 -As further consequence, the potential values for p, d, and q are limited.\
 -Currently, I cannot find data for carbon emissions that are seasonal.
 
-<b>Current plan</b>:
+<b>Current plan</b>:\
 -Forecast EV sales to check if yearly sales will reach, at worst, half of all light vehicle sales by 2030.\
 -If this is the case, assume this means that the forecasted value of registered EV vehicles would be the baseline for the solution. \
 -If this is not the case, figure out how much sales need to grow in order to meet the goal and determine how many registered EVs will be on the road if this were to happen. There will then be two forecast value of EV registrations, a theoretical baseline and the forecasted values.\
