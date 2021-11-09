@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tsa.stattools import adfuller
 from GlobalEmissionsARIMA import data, getModel, optimParam
 
 #Loading in the data
@@ -86,4 +87,82 @@ def predictWithCCS(sitesPerYear, targetYear):
         plt.legend()
         plt.show()
 
-predictWithCCS(20, 2050)
+#predictWithCCS(20, 2050)
+
+
+########################################################################################################################################
+
+
+###Revisions###
+
+
+#getting percentage of industry/electric sectors, setting targetyear, and getting observed CCS capacities
+percents = pd.read_csv("Datasets/Global-GHG-Emissions-by-sector-based-on-WRI-2020-1.csv")["Share of global greenhouse gas emissions (%)"]
+targetYear=2028
+percent_by_indust_elect = (percents[7:14].sum() + percents[15:20].sum())/100
+observed_max_capacities = CCSdata.cumsum()
+datesCCS = pd.date_range(start=observed_max_capacities.index[0], end=observed_max_capacities.index[-1], freq='YS')
+observed_max_capacities = observed_max_capacities.reindex(datesCCS, fill_value=0)
+observed_max_capacities = observed_max_capacities["Max Storage"].replace(to_replace=0, method="ffill")
+print(observed_max_capacities)
+
+#Change order to pdq that provides a series with less autocorrelation
+results = ARIMA(data, order=optimParam(data), enforce_stationarity=False, enforce_invertibility=False).fit()
+predictions = results.get_prediction(start="2020/01/01", end=str(targetYear), dynamic=False)
+
+#plotting global emissions for the industry and energy sectors
+fig, ax = plt.subplots()
+ax.plot(data, label="Observed global emissions", color='g')
+ax.plot(data*percent_by_indust_elect, label="Approximate industry and energy processing emissions", color='b')
+ax.set_xlabel("Time (Yearly)")
+ax.set_ylabel("Million tonnes of carbon dioxide")
+ax.set_title("Global carbon emissions vs emissions from industry and energy sectors")
+plt.legend()
+plt.show()
+
+#plotting the predicted emissions for both
+fig, ax = plt.subplots()
+ax.plot(predictions.predicted_mean, label="Predicted global emissions", color='g')
+ax.plot(predictions.predicted_mean*percent_by_indust_elect, label="Predicted industry and energy processing emissions", color='b')
+ax.set_xlabel("Time (Yearly)")
+ax.set_ylabel("Million tonnes of carbon dioxide")
+ax.set_title("Global, industry, and energy carbon emissions predictions")
+plt.legend()
+plt.show()
+
+#plotting the predicted industry/energy emissions vs the observed co2 capacity of built and upcoming CCS facilities
+indexOf2020 = observed_max_capacities.index.get_loc("2020/01/01")
+print(observed_max_capacities.iloc[indexOf2020:])
+fig, ax = plt.subplots()
+ax.plot(predictions.predicted_mean*percent_by_indust_elect, label="Predicted emissions from industry and energy processing facilities", color='b')
+ax.fill_between(predictions.conf_int().index, predictions.conf_int().iloc[:, 0]*percent_by_indust_elect, predictions.conf_int().iloc[:, 1]*percent_by_indust_elect, color='green', alpha=.5)
+ax.plot(observed_max_capacities.iloc[indexOf2020:], label="Observed carbon storage max capacity", color='r')
+ax.set_xlabel("Time (Yearly)")
+ax.set_ylabel("Million tonnes of carbon dioxide")
+ax.set_title("Predicted industry and energy processing emissions vs observed CCS max capacity")
+plt.legend()
+plt.show()
+
+#checking if observed CCS max capacity data is stationary by dickey-fuller test
+stat_test = adfuller(observed_max_capacities.values)
+print('Result: ', stat_test[0])
+print('p-value: ', stat_test[1])
+print('Critical Values:')
+for key, value in stat_test[4].items():
+	print('\t%s: %.3f' % (key, value))
+#test failed : data is not stationary
+
+#plotting prediction of CCS capacity
+targetYear=2100
+resultsCCS = ARIMA(observed_max_capacities, order=optimParam(observed_max_capacities), enforce_stationarity=False, enforce_invertibility=False).fit()
+predictionsCCS = resultsCCS.get_prediction(start="2028/01/01", end=str(targetYear), dynamic=False)
+predictions = results.get_prediction(start="2028/01/01", end=str(targetYear), dynamic=False)
+fig, ax = plt.subplots()
+ax.plot(predictionsCCS.predicted_mean, label="Predicted CO2 storage capacity", color='r')
+ax.plot(predictions.predicted_mean, label="Predicted CO2 emissions from industry and energy processing sectors", color='b')
+ax.set_xlabel("Time (Yearly)")
+ax.set_ylabel("Million tonnes of carbon dioxide")
+ax.set_title("Finding Net Zero")
+plt.axvline(pd.to_datetime('20900617', format='%Y%m%d', errors='ignore'), color='k', linestyle='--')
+plt.legend()
+plt.show()
