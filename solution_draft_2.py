@@ -118,6 +118,5 @@ plt.plot(years, list(forecast.predicted_mean) - ((np.cumsum(expected) * 4600) / 
 plt.plot(years, list(forecast.predicted_mean) - ((np.cumsum(expected_exp) * 4600) / 1000000), label='Forecast minus Expected Log')
 plt.plot(years, list(forecast.predicted_mean) - ((np.cumsum(list(expected_s1) + list(expected_s2[1:]))) * 4600) / 1000000, label='Forecast minus Expected S')
 
-
 plt.legend()
 plt.show()

@@ -23,10 +23,10 @@ mte['Year'] = mte['Year'].dt.year
 mte.set_index('Year', inplace=True)
 mte.index = pd.to_datetime(mte.index, format='%Y', errors = 'coerce')
 mte.index = mte.index.to_period('Y')
-'''
+
 print(mte)
 mte.info()
-
+'''
 p = range(0, 2)
 d = q = range(0, 3) # Define the p, d and q parameters to take any value between 0 and 2
 pdq = list(itertools.product(p, d, q)) # Generate all different combinations of p, q and q triplets
@@ -82,13 +82,13 @@ mod = sm.tsa.arima.ARIMA(mte,
 results = mod.fit()
 print(results.summary())
 
-results.plot_diagnostics(figsize=(15, 12))
+results.plot_diagnostics(figsize=(20, 15))
 
 pred = results.get_prediction(start = 33, end = 44, dynamic=False)
 pred_ci = pred.conf_int()
 print(pred_ci.head())
 
-ax = mte['1976':].plot(label='observed')
+ax = mte['1976':].plot(label='observed', figsize=(20, 15))
 pred.predicted_mean.plot(ax=ax, label='One-step ahead forecast', alpha=.7)
 
 ax.fill_between(pred_ci.index,
@@ -141,7 +141,7 @@ print('The Root Mean Square Error (RMSE) of the forcast: {:.4f}'
       .format(np.sqrt(sum((mte_forecast-mte_orginal['Sales in thousands'])**2)/len(mte_forecast))))
       
 # Get forecast of 10 years or 120 months steps ahead in future
-forecast = results.get_forecast(steps=25)
+forecast = results.get_forecast(steps=10)
 # Get confidence intervals of forecasts
 forecast_ci = forecast.conf_int()
 print(forecast_ci.head())

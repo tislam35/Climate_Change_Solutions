@@ -99,13 +99,13 @@ mod = sm.tsa.arima.ARIMA(mte,
 results = mod.fit()
 print(results.summary())
 
-results.plot_diagnostics(lags=6)
+results.plot_diagnostics(lags=6, figsize=(20, 15))
 
 pred = results.get_prediction(start = 4, end = 9, dynamic=False)
 pred_ci = pred.conf_int()
 print(pred_ci.head())
 
-ax = mte['2011':].plot(label='observed')
+ax = mte['2011':].plot(label='observed', figsize=(20, 15))
 pred.predicted_mean.plot(ax=ax, label='One-step ahead forecast', alpha=.7)
 
 ax.fill_between(pred_ci.index,
@@ -128,7 +128,7 @@ print('The Root Mean Square Error (RMSE) of the forcast: {:.4f}'
 pred_dynamic = results.get_prediction(start=pd.to_datetime('2015'), dynamic=True, full_results=True)
 pred_dynamic_ci = pred_dynamic.conf_int()
 
-ax = mte['2011':].plot(label='observed')
+ax = mte['2011':].plot(label='observed', figsize=(20, 15))
 pred_dynamic.predicted_mean.plot(label='Dynamic Forecast', ax=ax)
 
 ax.fill_between(pred_dynamic_ci.index,
@@ -163,7 +163,7 @@ forecast = results.get_forecast(steps=10)
 forecast_ci = forecast.conf_int()
 print(forecast_ci.head())
 
-ax = mte.plot(label='observed')
+ax = mte.plot(label='observed', figsize=(20, 15))
 forecast.predicted_mean.plot(ax=ax, label='Forecast')
 ax.fill_between(forecast_ci.index,
                 forecast_ci.iloc[:, 0],
