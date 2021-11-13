@@ -27,6 +27,6 @@
 -Consider using vars since EV car sales and EV car registrations are linked together due to being fairly new technology.
 
 <b>To do:</b>\
--Polish code and datasets.\
--Collect images.\
+-Polish code and datasets then recollect images.\
+-~~Collect images.~~ Done.\
 -~~Clean branch.~~ Done.
