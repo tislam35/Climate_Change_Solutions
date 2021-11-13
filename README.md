@@ -29,4 +29,4 @@
 <b>To do:</b>\
 -Polish code and datasets.\
 -Collect images.\
--Clean branch.
+-~~Clean branch.~~ Done.
