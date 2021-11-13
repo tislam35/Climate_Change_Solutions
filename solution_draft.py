@@ -15,7 +15,7 @@ from matplotlib import pyplot as plt
 
 warnings.filterwarnings("ignore") # specify to ignore warning messages
 
-path = "Datasets/USEVs.csv"
+path = "Datasets/USEVsales.csv"
 
 dateparse = lambda x: pd.to_datetime(x, format='%Y', errors = 'coerce')
 mte = pd.read_csv(path, parse_dates=['Year'], date_parser=dateparse) 
@@ -23,10 +23,27 @@ mte['Year'] = mte['Year'].dt.year
 mte.set_index('Year', inplace=True)
 mte.index = pd.to_datetime(mte.index, format='%Y', errors = 'coerce')
 mte.index = mte.index.to_period('Y')
-'''
-print(mte)
-mte.info()
 
+list_1 = mte['US Cars (Thousands)'].to_numpy()
+
+path = "Datasets/USEVs.csv"
+
+dateparse = lambda x: pd.to_datetime(x, format='%Y', errors = 'coerce')
+mte_2 = pd.read_csv(path, parse_dates=['Year'], date_parser=dateparse) 
+mte_2['Year'] = mte_2['Year'].dt.year
+mte_2.set_index('Year', inplace=True)
+mte_2.index = pd.to_datetime(mte_2.index, format='%Y', errors = 'coerce')
+mte_2.index = mte_2.index.to_period('Y')
+
+list_2 = mte_2['US Cars (Thousands)'].to_numpy()
+
+r = np.corrcoef(list_1, list_2)
+
+print(list_1)
+print(list_2)
+print(r)
+
+'''
 p = range(0, 2)
 d = q = range(0, 3) # Define the p, d and q parameters to take any value between 0 and 2
 pdq = list(itertools.product(p, d, q)) # Generate all different combinations of p, q and q triplets
@@ -76,19 +93,19 @@ wf['aic']=c
 print(wf[wf['aic']==wf['aic'].min()])
 '''
 mod = sm.tsa.arima.ARIMA(mte, 
-                                order=(1,0,1),  
+                                order=(3,0,0),  
                                 enforce_stationarity=False,
                                 enforce_invertibility=False)
 results = mod.fit()
 print(results.summary())
 
-results.plot_diagnostics(lags=5)
+results.plot_diagnostics(lags=6)
 
-pred = results.get_prediction(start = 5, end = 10, dynamic=False)
+pred = results.get_prediction(start = 4, end = 9, dynamic=False)
 pred_ci = pred.conf_int()
 print(pred_ci.head())
 
-ax = mte['2010':].plot(label='observed')
+ax = mte['2011':].plot(label='observed')
 pred.predicted_mean.plot(ax=ax, label='One-step ahead forecast', alpha=.7)
 
 ax.fill_between(pred_ci.index,
@@ -111,7 +128,7 @@ print('The Root Mean Square Error (RMSE) of the forcast: {:.4f}'
 pred_dynamic = results.get_prediction(start=pd.to_datetime('2015'), dynamic=True, full_results=True)
 pred_dynamic_ci = pred_dynamic.conf_int()
 
-ax = mte['2010':].plot(label='observed')
+ax = mte['2011':].plot(label='observed')
 pred_dynamic.predicted_mean.plot(label='Dynamic Forecast', ax=ax)
 
 ax.fill_between(pred_dynamic_ci.index,
@@ -141,7 +158,7 @@ print('The Root Mean Square Error (RMSE) of the forcast: {:.4f}'
       .format(np.sqrt(sum((mte_forecast-mte_orginal['US Cars (Thousands)'])**2)/len(mte_forecast))))
       
 # Get forecast of 10 years or 120 months steps ahead in future
-forecast = results.get_forecast(steps=30)
+forecast = results.get_forecast(steps=10)
 # Get confidence intervals of forecasts
 forecast_ci = forecast.conf_int()
 print(forecast_ci.head())
