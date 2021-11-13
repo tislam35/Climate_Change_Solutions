@@ -15,7 +15,7 @@ from matplotlib import pyplot as plt
 
 warnings.filterwarnings("ignore") # specify to ignore warning messages
 
-path = "Datasets\GlobalEmissions.csv"
+path = "Datasets/USEmissions.csv"
 
 dateparse = lambda x: pd.to_datetime(x, format='%Y', errors = 'coerce')
 mte = pd.read_csv(path, parse_dates=['Year'], date_parser=dateparse) 
@@ -23,10 +23,10 @@ mte['Year'] = mte['Year'].dt.year
 mte.set_index('Year', inplace=True)
 mte.index = pd.to_datetime(mte.index, format='%Y', errors = 'coerce')
 mte.index = mte.index.to_period('Y')
-'''
+
 print(mte)
 mte.info()
-
+'''
 p = range(0, 2)
 d = q = range(0, 3) # Define the p, d and q parameters to take any value between 0 and 2
 pdq = list(itertools.product(p, d, q)) # Generate all different combinations of p, q and q triplets
