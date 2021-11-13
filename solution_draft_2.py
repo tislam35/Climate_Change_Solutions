@@ -1,0 +1,88 @@
+# Code based on a modified version of https://www.kaggle.com/vijaikm/co2-emission-forecast-with-python-seasonal-arima
+# Trends data taken from https://www.iea.org/reports/global-ev-outlook-2021/trends-and-developments-in-electric-vehicle-markets
+
+import csv
+import warnings
+import itertools
+import numpy as np
+import pandas as pd
+import matplotlib.pylab
+import statsmodels
+import statsmodels.api as sm
+from statsmodels.tsa.stattools import coint, adfuller
+from matplotlib.pylab import rcParams
+from matplotlib import pyplot as plt 
+
+warnings.filterwarnings("ignore") # specify to ignore warning messages
+
+path = "Datasets/USCarSales.csv"
+
+dateparse = lambda x: pd.to_datetime(x, format='%Y', errors = 'coerce')
+mte = pd.read_csv(path, parse_dates=['Year'], date_parser=dateparse) 
+mte['Year'] = mte['Year'].dt.year
+mte.set_index('Year', inplace=True)
+mte.index = pd.to_datetime(mte.index, format='%Y', errors = 'coerce')
+mte.index = mte.index.to_period('Y')
+
+mod = sm.tsa.arima.ARIMA(mte, 
+                                order=(2,2,2),  
+                                enforce_stationarity=False,
+                                enforce_invertibility=False)
+results = mod.fit()
+      
+# Get forecast of 10 years or 120 months steps ahead in future
+forecast = results.get_forecast(steps=10)
+# Get confidence intervals of forecasts
+forecast_ci = forecast.conf_int()
+
+ax = mte.plot(label='Observed Car Sales', figsize=(20, 15))
+forecast.predicted_mean.plot(ax=ax, label='Forecasted Car Sales')
+
+linear_end = forecast.predicted_mean[9] / 2
+
+path = "Datasets/USEVsales.csv"
+
+dateparse = lambda x: pd.to_datetime(x, format='%Y', errors = 'coerce')
+mte = pd.read_csv(path, parse_dates=['Year'], date_parser=dateparse) 
+mte['Year'] = mte['Year'].dt.year
+mte.set_index('Year', inplace=True)
+mte.index = pd.to_datetime(mte.index, format='%Y', errors = 'coerce')
+mte.index = mte.index.to_period('Y')
+
+mod = sm.tsa.arima.ARIMA(mte, 
+                                order=(3,0,0),  
+                                enforce_stationarity=False,
+                                enforce_invertibility=False)
+results = mod.fit()
+      
+# Get forecast of 10 years or 120 months steps ahead in future
+forecast = results.get_forecast(steps=10)
+# Get confidence intervals of forecasts
+forecast_ci = forecast.conf_int()
+
+mte.plot(ax=ax, label='Observed EV sales')
+forecast.predicted_mean.plot(ax=ax, label='Forecasted EV sales')
+
+linear_start = forecast.predicted_mean[0]
+gap = (linear_end - linear_start) / 9
+
+expected = [linear_start,]
+for i in range(0,9):
+    expected.append(linear_start + (gap * (i+1)))
+
+expected_exp = np.logspace(np.log(linear_start), np.log(linear_end), 10, base=np.exp(1))
+expected_s1 = np.logspace(np.log(linear_start), np.log((linear_end - linear_start) * 0.67), 5, base=np.exp(1))
+expected_s2 = np.logspace(np.log((linear_end - linear_start) * 0.67), np.log(linear_end), 6, base=np.exp(1))
+print(expected_s1)
+print(expected_s2)
+    
+years = [51, 52, 53, 54, 55, 56, 57, 58, 59, 60]
+plt.plot(years, expected, label='Target EV sales (linear growth)')
+plt.plot(years, expected_exp, label='Target EV sales (exp growth)')
+plt.plot(years, list(expected_s1) + list(expected_s2)[1:], label='Target EV sales (s growth)')
+
+ax.set_xlabel('Year')
+ax.set_ylabel('Car Sales')
+
+plt.legend()
+plt.show()
