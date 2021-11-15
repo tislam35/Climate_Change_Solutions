@@ -19,7 +19,8 @@
 -~~Forecast EV sales to check if yearly sales will reach, at worst, half of all light vehicle sales by 2030.~~ Done.\
 -~~If this is the case, assume this means that the forecasted value of registered EV vehicles would be the baseline for the solution.~~ Done.\
 -~~If this is not the case, figure out how much sales need to grow in order to meet the goal and determine how many registered EVs will be on the road if this were to happen. There will then be two forecast value of EV registrations, a theoretical baseline and the forecasted values.~~ Done.\
--~~Subtract the average carbon emissions of light vehicles times registered EVs from the forecasted values of carbon emissions in the US. If a theoretical baseline is needed, do it for that as well.~~ Done.
+-~~Subtract the average carbon emissions of light vehicles times registered EVs from the forecasted values of carbon emissions in the US. If a theoretical baseline is needed, do it for that as well.~~ Done.\
+-Remove cars older than 10 years from the cumulative sum of cars on the road.
 
 <b>Optional steps if time permits:</b>\
 -Determine the average carbon emissions by cars based on registration data relative to US emissions instead of a value found online.\
