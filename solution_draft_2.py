@@ -48,6 +48,7 @@ mte['Year'] = mte['Year'].dt.year
 mte.set_index('Year', inplace=True)
 mte.index = pd.to_datetime(mte.index, format='%Y', errors = 'coerce')
 mte.index = mte.index.to_period('Y')
+mte_2 = mte
 
 mod = sm.tsa.arima.ARIMA(mte, 
                                 order=(3,0,0),  
@@ -69,8 +70,8 @@ gap = (linear_end - linear_start) / 9
 
 expected = [linear_start,]
 for i in range(0,9):
-    expected.append(linear_start + (gap * (i+1)))
-
+    expected.append(linear_start + (gap * (i+1)))   
+    
 expected_exp = np.logspace(np.log(linear_start), np.log(linear_end), 10, base=np.exp(1))
 expected_s1 = np.logspace(np.log(linear_start), np.log((linear_end - linear_start) * 0.67), 5, base=np.exp(1))
 expected_s2 = np.logspace(np.log((linear_end - linear_start) * 0.67), np.log(linear_end), 6, base=np.exp(1))
@@ -112,11 +113,21 @@ forecast.predicted_mean.plot(ax=ax, label='Forecast')
 ax.set_xlabel('Time (year)')
 ax.set_ylabel('NG CO2 Emission level')
 
-new_forecast = forecast.predicted_mean - ((np.cumsum(actuals.predicted_mean) * 4600) / 1000000)
+actuals_list = actuals.predicted_mean
+combined_s = list(expected_s1) + list(expected_s2[1:])
+mte_2_list = mte_2.values.tolist()
+
+for i in range(0, 10):
+    actuals_list[i] -= mte_2_list[i]
+    expected[i] -= mte_2_list[i]
+    expected_exp[i] -= mte_2_list[i]
+    combined_s[i] -= mte_2_list[i]
+
+new_forecast = forecast.predicted_mean - ((np.cumsum(actuals_list) * 4600) / 1000000)
 plt.plot(years, list(new_forecast), label='Forecast minus EVs')
 plt.plot(years, list(forecast.predicted_mean) - ((np.cumsum(expected) * 4600) / 1000000), label='Forecast minus Expected')
 plt.plot(years, list(forecast.predicted_mean) - ((np.cumsum(expected_exp) * 4600) / 1000000), label='Forecast minus Expected Log')
-plt.plot(years, list(forecast.predicted_mean) - ((np.cumsum(list(expected_s1) + list(expected_s2[1:]))) * 4600) / 1000000, label='Forecast minus Expected S')
+plt.plot(years, list(forecast.predicted_mean) - ((np.cumsum(combined_s) * 4600) / 1000000), label='Forecast minus Expected S')
 
 plt.legend()
 plt.show()
