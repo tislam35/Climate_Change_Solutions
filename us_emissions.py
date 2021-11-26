@@ -95,8 +95,8 @@ ax.fill_between(pred_ci.index,
                 pred_ci.iloc[:, 0],
                 pred_ci.iloc[:, 1], color='r', alpha=.5)
 
-ax.set_xlabel('Time (years)')
-ax.set_ylabel('NG CO2 Emissions')
+ax.set_xlabel('Year')
+ax.set_ylabel('CO2 Emissions in million tonnes')
 plt.legend()
 
 mte_forecast = pred.predicted_mean
@@ -125,8 +125,8 @@ ax.fill_betweenx(ax.get_ylim(),
                  mte.index[-1],
                  alpha=.1, zorder=-1)
 
-ax.set_xlabel('Time (years)')
-ax.set_ylabel('CO2 Emissions')
+ax.set_xlabel('Year')
+ax.set_ylabel('CO2 Emissions in million tonnes')
 
 plt.legend()
 
@@ -151,8 +151,8 @@ forecast.predicted_mean.plot(ax=ax, label='Forecast')
 ax.fill_between(forecast_ci.index,
                 forecast_ci.iloc[:, 0],
                 forecast_ci.iloc[:, 1], color='g', alpha=.4)
-ax.set_xlabel('Time (year)')
-ax.set_ylabel('NG CO2 Emission level')
+ax.set_xlabel('Year')
+ax.set_ylabel('CO2 Emissions in million tonnes')
 
 plt.legend()
 plt.show()

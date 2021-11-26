@@ -84,7 +84,7 @@ plt.plot(years, expected_exp, label='Target EV sales (exp growth)')
 plt.plot(years, list(expected_s1) + list(expected_s2)[1:], label='Target EV sales (s growth)')
 
 ax.set_xlabel('Year')
-ax.set_ylabel('Car Sales')
+ax.set_ylabel('Car Sales in Thousands')
 
 path = "Datasets/USEmissions.csv"
 
@@ -110,8 +110,8 @@ print(forecast_ci.head())
 
 ax = mte.plot(label='observed', figsize=(20, 15))
 forecast.predicted_mean.plot(ax=ax, label='Forecast')
-ax.set_xlabel('Time (year)')
-ax.set_ylabel('NG CO2 Emission level')
+ax.set_xlabel('Year')
+ax.set_ylabel('CO2 Emissions in million tonnes')
 
 actuals_list = actuals.predicted_mean
 combined_s = list(expected_s1) + list(expected_s2[1:])

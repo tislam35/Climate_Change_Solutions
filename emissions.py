@@ -23,12 +23,13 @@ mte['Year'] = mte['Year'].dt.year
 mte.set_index('Year', inplace=True)
 mte.index = pd.to_datetime(mte.index, format='%Y', errors = 'coerce')
 mte.index = mte.index.to_period('Y')
-'''
+
 print(mte)
 mte.info()
 
-
-p = d = q = range(0, 2) # Define the p, d and q parameters to take any value between 0 and 2
+'''
+p = range(0, 2)
+d = q = range(0, 3) # Define the p, d and q parameters to take any value between 0 and 2
 pdq = list(itertools.product(p, d, q)) # Generate all different combinations of p, q and q triplets
 pdq_x_QDQs = [(x[0], x[1], x[2], 1) for x in list(itertools.product(p, d, q))] # Generate all different combinations of seasonal p, q and q triplets
 print('Examples of Seasonal ARIMA parameter combinations for Seasonal ARIMA...')
@@ -84,7 +85,7 @@ print(results.summary())
 
 results.plot_diagnostics(figsize=(15, 12))
 
-pred = results.get_prediction(start = 44, end = 54, dynamic=False)
+pred = results.get_prediction(start = 44, end = 55, dynamic=False)
 pred_ci = pred.conf_int()
 print(pred_ci.head())
 
@@ -95,8 +96,8 @@ ax.fill_between(pred_ci.index,
                 pred_ci.iloc[:, 0],
                 pred_ci.iloc[:, 1], color='r', alpha=.5)
 
-ax.set_xlabel('Time (years)')
-ax.set_ylabel('NG CO2 Emissions')
+ax.set_xlabel('Year')
+ax.set_ylabel('CO2 Emissions in million tonnes')
 plt.legend()
 
 mte_forecast = pred.predicted_mean
@@ -125,8 +126,8 @@ ax.fill_betweenx(ax.get_ylim(),
                  mte.index[-1],
                  alpha=.1, zorder=-1)
 
-ax.set_xlabel('Time (years)')
-ax.set_ylabel('CO2 Emissions')
+ax.set_xlabel('Year')
+ax.set_ylabel('CO2 Emissions in million tonnes')
 
 plt.legend()
 
@@ -151,8 +152,8 @@ forecast.predicted_mean.plot(ax=ax, label='Forecast')
 ax.fill_between(forecast_ci.index,
                 forecast_ci.iloc[:, 0],
                 forecast_ci.iloc[:, 1], color='g', alpha=.4)
-ax.set_xlabel('Time (year)')
-ax.set_ylabel('NG CO2 Emission level')
+ax.set_xlabel('Year')
+ax.set_ylabel('CO2 Emissions in million tonnes')
 
 plt.legend()
 plt.show()

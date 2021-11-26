@@ -96,7 +96,7 @@ ax.fill_between(pred_ci.index,
                 pred_ci.iloc[:, 1], color='r', alpha=.5)
 
 ax.set_xlabel('Year')
-ax.set_ylabel('Registered Electric Vehicles')
+ax.set_ylabel('Registered EVs in Thousands')
 plt.legend()
 
 mte_forecast = pred.predicted_mean
@@ -126,7 +126,7 @@ ax.fill_betweenx(ax.get_ylim(),
                  alpha=.1, zorder=-1)
 
 ax.set_xlabel('Year')
-ax.set_ylabel('Registered Electric Vehicles')
+ax.set_ylabel('Registered EVs in Thousands')
 
 plt.legend()
 
@@ -152,7 +152,7 @@ ax.fill_between(forecast_ci.index,
                 forecast_ci.iloc[:, 0],
                 forecast_ci.iloc[:, 1], color='g', alpha=.4)
 ax.set_xlabel('Year')
-ax.set_ylabel('Registered Electric Vehicles')
+ax.set_ylabel('Registered EVs in Thousands')
 
 plt.legend()
 plt.show()
