@@ -8,7 +8,8 @@
 -The current car lineup remains the same in terms of the ratio of EV to non-EV offerings.\
 -EV sales do not follow the S curve.\
 -Plug-in hybrid owners do not use the battery at all and therefore emit as much carbon as ICE vehicles.\
--The American powergrid can handle an infinite number of EVs charging.
+-The American powergrid can handle an infinite number of EVs charging.\
+-The percentage of cars in the number of registered vehicles remains at 35% for the entire forecasting period.
 
 <b>Limitations:</b>\
 -Since EVs are relatively new technology, there is not enough historical data to create a solid normal distribution for the ARIMA model in some cases.\
@@ -21,13 +22,13 @@
 -~~If this is not the case, figure out how much sales need to grow in order to meet the goal and determine how many registered EVs will be on the road if this were to happen. There will then be two forecast value of EV registrations, a theoretical baseline and the forecasted values.~~ Done.\
 -~~Subtract the average carbon emissions of light vehicles times registered EVs from the forecasted values of carbon emissions in the US. If a theoretical baseline is needed, do it for that as well.~~ Done.\
 ~~-Remove cars older than 10 years from the cumulative sum of cars on the road.~~ Done.\
--Check if emissions reduced makes logical sense based on America's emission profile.\
--Model cumulitive cars on the road based off sales.
+~~-Check if emissions reduced makes logical sense based on America's emission profile.~~ Done.\
+~~-Model cumulitive cars on the road based off sales.~~ Done.
 
-<b>Optional steps if time permits:</b>\
--Determine the average carbon emissions by cars based on registration data relative to US emissions instead of a value found online.\
--Perform forecasting on various thresholds either based on EV Sales market share or EV cars registration share.\
--Consider using vars since EV car sales and EV car registrations are linked together due to being fairly new technology.
+<b>Optional steps:</b>\
+-Forecast registered cars till 2030.\
+-Model the naive theoretical carbon emissions for various rates of EV adoption growth.\
+-Verify that the results are in line with expectations.
 
 <b>To do:</b>\
 -Polish code and datasets then recollect images.\
