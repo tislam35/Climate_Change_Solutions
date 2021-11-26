@@ -114,7 +114,8 @@ ax.set_xlabel('Year')
 ax.set_ylabel('CO2 Emissions in million tonnes')
 
 actuals_list = actuals.predicted_mean
-combined_s = list(expected_s1) + list(expected_s2[1:])
+combined_s = list(expected_s1).copy() 
+combined_s.extend(expected_s2[1:])
 mte_2_list = mte_2.values.tolist()
 
 for i in range(0, 10):
@@ -129,5 +130,63 @@ plt.plot(years, list(forecast.predicted_mean) - ((np.cumsum(expected) * 4600) / 
 plt.plot(years, list(forecast.predicted_mean) - ((np.cumsum(expected_exp) * 4600) / 1000000), label='Forecast minus Expected Log')
 plt.plot(years, list(forecast.predicted_mean) - ((np.cumsum(combined_s) * 4600) / 1000000), label='Forecast minus Expected S')
 
+x = np.arange(2011, 2031)
+fig1, ax1 = plt.subplots()
+y = [sales for sublist in mte_2_list for sales in sublist]
+y0 = y.copy()
+y0.extend(actuals_list)
+y1 = y.copy()
+y1.extend(expected)
+y2 = y.copy()
+y2.extend(expected_exp)
+y3 = y.copy()
+y3.extend(combined_s)
+
+ax1.plot(x, np.cumsum(y0), label = 'Forecast')
+ax1.plot(x, np.cumsum(y1), label = 'Expected with linear growth')
+ax1.plot(x, np.cumsum(y2), label = 'Expected with exponential growth')
+ax1.plot(x, np.cumsum(y3), label = 'Expected with s-curve growth')
+ax1.set_xlabel('Year')
+ax1.set_ylabel('Registered EVs in thousans')
+
 plt.legend()
 plt.show()
+
+#co2 2030
+#forecast - 4246.669349925766
+#actuals - 4232.1270064141945
+#expected linear - 4071.00035651
+#expected exp - 4139.9093338
+#expected s - 4061.61798725
+
+#no of cars 2030
+#actuals - 4,293,382
+#expected linear - 39,320,915
+#expected exp - 24,340,702
+#expected s - 41,360,560
+
+#cars registered 35%
+#assumed no of cars by 2030, 350 million
+#35% of 350m = 122,500,000
+#15% of 4246.669349925766 = 637.0004024888649
+
+#actuals
+#market share = 4,293,382/122,500,000 = 3.5048016326530612244897959183673%
+#theoretical decrease = 22.325600506436308261973877551018
+#actual decrease = 14.5423435115715
+
+#expected linear
+#market share = 39,320,915/122,500,000 = 32.098706122448979591836734693878%
+#theoretical decrease = 204.46888719371791983170204081633
+#actual decrease = 175.668993415766
+
+#expected exp
+#market share = 24,340,702/122,500,000 = 19.869960816326530612244897959184%
+#theoretical decrease = 126.57173037437974570742693877551
+#actual decrease = 106.760016125766
+
+#expected s
+#market share = 41,360,560/122,500,000 = 33.763722448979591836734693877551%
+#theoretical decrease = 215.07504789522323288444081632653
+#actual decrease = 185.051362675766
+
