@@ -17,7 +17,7 @@
 - There are a number of years that do not have any growth in CCS storage capacity
 - Values for p, d, and q are limited
 - Data is not seasonal or stationary
-- Data related to real world applications of carbon capturing and sequestration is limited
+- Data related to real world applications of carbon capturing and sequestration technology is limited
 
 <b> Limitations of solution </b>
 
