@@ -23,3 +23,5 @@
 - Cost of CCS per tonne of carbon dioxide processed is general more expensive than other means of reducing carbon emissions
 - Land use for storing captured carbon is limited
 - Cost of CCS application depends on the purity and concentration of carbon dioxide at the source.
+- Cost of CCS application depends on the method of capture being used (pre-combustion, post-combustion, etc)
+- Additional energy is needed to apply CCS which adds to the amount of carbon dioxide emitted
