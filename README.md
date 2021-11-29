@@ -10,13 +10,14 @@
 - There is an unlimited supply of money to fund the growth of CCS facilities
 - Application of CCS includes both retrofitting existing facilities and building new facilities.
 
-<b> Limitations of forecast </b>
+<b> Limitations of model </b>
 
 - Existing CCS data is sparse before the 21st century
 - The 2015 Paris Agreement has dramatically increased the number of soon to be operational CCS facilities in recent years
 - There are a number of years that do not have any growth in CCS storage capacity
 - Values for p, d, and q are limited
 - Data is not seasonal or stationary
+- Data related to real world applications of carbon capturing and sequestration is limited
 
 <b> Limitations of solution </b>
 
