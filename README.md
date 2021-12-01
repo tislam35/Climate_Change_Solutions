@@ -26,11 +26,11 @@
 ~~-Model cumulitive cars on the road based off sales.~~ Done.
 
 <b>Optional steps:</b>\
--Forecast registered cars till 2030.\
+~~-Forecast registered cars till 2030.~~ Done.\
 -Model the naive theoretical carbon emissions for various rates of EV adoption growth.\
--Verify that the results are in line with expectations.
+~~-Verify that the results are in line with expectations.~~ Done.
 
 <b>To do:</b>\
--Polish code and datasets then recollect images.\
+-~~Polish code and datasets then recollect images.~~ Done.\
 -~~Collect images.~~ Done.\
 -~~Clean branch.~~ Done.
