@@ -1,5 +1,5 @@
 # Code based on a modified version of https://www.kaggle.com/vijaikm/co2-emission-forecast-with-python-seasonal-arima
-# Emission data taken from https://www.statista.com/statistics/199983/us-vehicle-sales-since-1951/
+# Trends data taken from https://www.statista.com/statistics/183505/number-of-vehicles-in-the-united-states-since-1990/
 
 import csv
 import warnings
@@ -15,7 +15,7 @@ from matplotlib import pyplot as plt
 
 warnings.filterwarnings("ignore") # specify to ignore warning messages
 
-path = "Datasets/USCarSales.csv"
+path = "Datasets/USRegistered.csv"
 
 dateparse = lambda x: pd.to_datetime(x, format='%Y', errors = 'coerce')
 mte = pd.read_csv(path, parse_dates=['Year'], date_parser=dateparse) 
@@ -76,19 +76,19 @@ wf['aic']=c
 print(wf[wf['aic']==wf['aic'].min()])
 '''
 mod = sm.tsa.arima.ARIMA(mte, 
-                                order=(2,2,2),  
+                                order=(0,2,2),  
                                 enforce_stationarity=False,
                                 enforce_invertibility=False)
 results = mod.fit()
 print(results.summary())
 
-results.plot_diagnostics(figsize=(20, 15))
+results.plot_diagnostics(lags = 5, figsize=(20, 15))
 
-pred = results.get_prediction(start = 33, end = 44, dynamic=False)
+pred = results.get_prediction(start = 6, end = 10, dynamic=False)
 pred_ci = pred.conf_int()
 print(pred_ci.head())
 
-ax = mte['1976':].plot(label='observed', figsize=(20, 15))
+ax = mte['2012':].plot(label='observed', figsize=(20, 15))
 pred.predicted_mean.plot(ax=ax, label='One-step ahead forecast', alpha=.7)
 
 ax.fill_between(pred_ci.index,
@@ -96,22 +96,22 @@ ax.fill_between(pred_ci.index,
                 pred_ci.iloc[:, 1], color='r', alpha=.5)
 
 ax.set_xlabel('Year')
-ax.set_ylabel('Sales in millions')
+ax.set_ylabel('Registered Cars in Millions')
 plt.legend()
 
 mte_forecast = pred.predicted_mean
-mte_truth = mte['2009':]
+mte_truth = mte['2016':]
 
 # Compute the mean square error
-mse = ((mte_forecast - mte_truth['Sales in millions']) ** 2).mean()
+mse = ((mte_forecast - mte_truth['Cars']) ** 2).mean()
 print('The Mean Squared Error (MSE) of the forecast is {}'.format(round(mse, 2)))
 print('The Root Mean Square Error (RMSE) of the forcast: {:.4f}'
-      .format(np.sqrt(sum((mte_forecast-mte_truth['Sales in millions'])**2)/len(mte_forecast))))
-
-pred_dynamic = results.get_prediction(start=pd.to_datetime('2009'), dynamic=True, full_results=True)
+      .format(np.sqrt(sum((mte_forecast-mte_truth['Cars'])**2)/len(mte_forecast))))
+      
+pred_dynamic = results.get_prediction(start=pd.to_datetime('2015'), dynamic=True, full_results=True)
 pred_dynamic_ci = pred_dynamic.conf_int()
 
-ax = mte['1976':].plot(label='observed', figsize=(20, 15))
+ax = mte['2012':].plot(label='observed', figsize=(20, 15))
 pred_dynamic.predicted_mean.plot(label='Dynamic Forecast', ax=ax)
 
 ax.fill_between(pred_dynamic_ci.index,
@@ -121,27 +121,27 @@ ax.fill_between(pred_dynamic_ci.index,
                 alpha=.3)
 
 ax.fill_betweenx(ax.get_ylim(), 
-                 pd.to_datetime('2009'), 
+                 pd.to_datetime('2015'), 
                  mte.index[-1],
                  alpha=.1, zorder=-1)
 
 ax.set_xlabel('Year')
-ax.set_ylabel('Sales in millions')
+ax.set_ylabel('Registered Cars in Millions')
 
 plt.legend()
 
 # Extract the predicted and true values of our time series
 mte_forecast = pred_dynamic.predicted_mean
-mte_orginal = mte['2009':]
+mte_orginal = mte['2016':]
 
 # Compute the mean square error
-mse = ((mte_forecast - mte_orginal['Sales in millions']) ** 2).mean()
+mse = ((mte_forecast - mte_orginal['Cars']) ** 2).mean()
 print('The Mean Squared Error (MSE) of the forecast is {}'.format(round(mse, 2)))
 print('The Root Mean Square Error (RMSE) of the forcast: {:.4f}'
-      .format(np.sqrt(sum((mte_forecast-mte_orginal['Sales in millions'])**2)/len(mte_forecast))))
+      .format(np.sqrt(sum((mte_forecast-mte_orginal['Cars'])**2)/len(mte_forecast))))
       
 # Get forecast of 10 years or 120 months steps ahead in future
-forecast = results.get_forecast(steps=10)
+forecast = results.get_forecast(steps=11)
 # Get confidence intervals of forecasts
 forecast_ci = forecast.conf_int()
 print(forecast_ci.head())
@@ -152,7 +152,9 @@ ax.fill_between(forecast_ci.index,
                 forecast_ci.iloc[:, 0],
                 forecast_ci.iloc[:, 1], color='g', alpha=.4)
 ax.set_xlabel('Year')
-ax.set_ylabel('Sales in millions')
+ax.set_ylabel('Registered EVs in Thousands')
+
+print(forecast.predicted_mean[10])
 
 plt.legend()
 plt.show()

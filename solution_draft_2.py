@@ -111,7 +111,7 @@ print(forecast_ci.head())
 ax = mte.plot(label='observed', figsize=(20, 15))
 forecast.predicted_mean.plot(ax=ax, label='Forecast')
 ax.set_xlabel('Year')
-ax.set_ylabel('CO2 Emissions in million tonnes')
+ax.set_ylabel('Car Sales in Thousands')
 
 actuals_list = actuals.predicted_mean
 combined_s = list(expected_s1).copy() 
@@ -130,8 +130,8 @@ plt.plot(years, list(forecast.predicted_mean) - ((np.cumsum(expected) * 4600) / 
 plt.plot(years, list(forecast.predicted_mean) - ((np.cumsum(expected_exp) * 4600) / 1000000), label='Forecast minus Expected Log')
 plt.plot(years, list(forecast.predicted_mean) - ((np.cumsum(combined_s) * 4600) / 1000000), label='Forecast minus Expected S')
 
-x = np.arange(2011, 2031)
-fig1, ax1 = plt.subplots()
+x = [2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]
+fig1, ax1 = plt.subplots(figsize=(20, 15))
 y = [sales for sublist in mte_2_list for sales in sublist]
 y0 = y.copy()
 y0.extend(actuals_list)
@@ -147,7 +147,7 @@ ax1.plot(x, np.cumsum(y1), label = 'Expected with linear growth')
 ax1.plot(x, np.cumsum(y2), label = 'Expected with exponential growth')
 ax1.plot(x, np.cumsum(y3), label = 'Expected with s-curve growth')
 ax1.set_xlabel('Year')
-ax1.set_ylabel('Registered EVs in thousans')
+ax1.set_ylabel('Registered EVs in thousands')
 
 plt.legend()
 plt.show()
@@ -166,27 +166,27 @@ plt.show()
 #expected s - 41,360,560
 
 #cars registered 35%
-#assumed no of cars by 2030, 350 million
-#35% of 350m = 122,500,000
+#estimated no of cars by 2030: 309,309,894
+#35% of est = 108,258,462.9
 #15% of 4246.669349925766 = 637.0004024888649
 
 #actuals
-#market share = 4,293,382/122,500,000 = 3.5048016326530612244897959183673%
-#theoretical decrease = 22.325600506436308261973877551018
+#market share = 4,293,382/108,258,462.9 = 3.965862700236066255841879314176%
+#theoretical decrease = 25.262561362659507722345464781211
 #actual decrease = 14.5423435115715
 
 #expected linear
-#market share = 39,320,915/122,500,000 = 32.098706122448979591836734693878%
-#theoretical decrease = 204.46888719371791983170204081633
+#market share = 39,320,915/108,258,462.9 = 36.321331327529868336972295955257%
+#theoretical decrease = 231.36702674567943804958180317929
 #actual decrease = 175.668993415766
 
 #expected exp
-#market share = 24,340,702/122,500,000 = 19.869960816326530612244897959184%
-#theoretical decrease = 126.57173037437974570742693877551
+#market share = 24,340,702/108,258,462.9 = 22.483879179481680965193160894214%
+#theoretical decrease = 143.22240086840840273153185514146
 #actual decrease = 106.760016125766
 
 #expected s
-#market share = 41,360,560/122,500,000 = 33.763722448979591836734693877551%
-#theoretical decrease = 215.07504789522323288444081632653
+#market share = 41,360,560/108,258,462.9 = 38.205382648195719024937310466838%
+#theoretical decrease = 243.36844124141768161336050153729
 #actual decrease = 185.051362675766
 
